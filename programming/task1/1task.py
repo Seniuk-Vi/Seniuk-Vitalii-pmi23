@@ -14,20 +14,42 @@ import doctest
 #       Вивести на екран єдине ціле число - кількість способів.
 
 
+def appropriation(arr):
+    for j in range(1, len(arr)):
+        arr[j] += arr[j - 1]
+    return arr
+
+
 def count_amount_of_ways(n):
     """
-    Counts number of ways in hexagon
-    Formula is ==> (k*3)-(5*(n-1)+3), k - number of cells in hexagon
-    :argument n: size of hexagon
-    :returns Integer
-    >>> count_amount_of_ways(2)
-    12
-    >>> count_amount_of_ways(3)
-    42
+       Counts number of ways in hexagon
+       :argument n: size of hexagon
+       :returns Integer
+       >>> count_amount_of_ways(2)
+       11
+       >>> count_amount_of_ways(5)
+       259123
     """
-    k = 1 + 6 * (n * (n - 1) / 2)
-    result = (k * 3) - (6 * (n - 1) + 3)
-    return int(result)
+
+    primary_array = [1 for i in range(n)]
+
+    for i in range(n - 1):
+        arr = [0 for x in range(len(primary_array) + 1)]
+        for j in range(len(primary_array)):
+            arr[j] += primary_array[j]
+            arr[j + 1] += primary_array[j]
+        primary_array = arr
+        appropriation(primary_array)
+
+    # add another half
+    for i in range(n - 1):
+        arr = [0 for x in range(len(primary_array) - 1)]
+        for k in range(len(primary_array) - 1):
+            arr[k] += primary_array[k]
+            arr[k] += primary_array[k + 1]
+        primary_array = arr
+        appropriation(primary_array)
+    return primary_array[-1]
 
 
 def int_input():
@@ -36,7 +58,9 @@ def int_input():
     """
     while True:
         try:
-            n = int(input("Enter size of the hexagonal field(N): "))
+            n = int(input("Enter size of the hexagonal field(N), exit = 0: "))
+            if n == 0:
+                break
             if n < 2 or n > 12:
                 print("Input must be between 2 and 12")
                 continue
