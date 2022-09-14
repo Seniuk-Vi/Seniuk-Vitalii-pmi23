@@ -56,6 +56,7 @@ def int_input():
     """
     Operating function that validates input data and handles errors
     """
+
     while True:
         try:
             n = int(input("Enter size of the hexagonal field(N), exit = 0: "))
@@ -67,9 +68,10 @@ def int_input():
         except ValueError:
             print("Please, enter the correct number [2,12]!")
             continue
-        print("There are %d different ways to get from A to B." % (count_amount_of_ways(n)))
+        return n
 
 
 if __name__ == "__main__":
     doctest.testmod()
-    int_input()
+    n = int_input()
+    print("There are %d different ways to get from A to B." % (count_amount_of_ways(n)))
