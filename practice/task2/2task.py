@@ -23,21 +23,27 @@ class Array:
             self.array = [random.randint(data[0], data[1] - 1) for i in range(data[0], data[1])]
         else:
             raise Exception("Wrong arguments in constructor")
-        merge_sort(self.array, 0, len(self.array) - 1)
+        print(f"Total number of steps: {merge_sort(self.array, 0, len(self.array) - 1)}")
 
 
 def console_array():
-    array_size = int(input("Enter array size[2-30]"))
-    if 1 > array_size > 31:
+    try:
+        array_size = int(input("Enter array size[2-30]:"))
+        if 1 > array_size > 31:
+            raise ValueError()
+    except ValueError:
         raise ValueError("Wrong array size[2-30]")
     array = Array(array_size)
     return array.array
 
 
 def random_array():
-    a = int(input("Enter array start:"))
-    b = int(input("Enter array end:"))
-    if a > b - 1:
+    try:
+        a = int(input("Enter array start:"))
+        b = int(input("Enter array end:"))
+        if a > b - 1:
+            raise ValueError("Start must be less than end")
+    except ValueError:
         raise ValueError("Start must be less than end")
     array = Array(a, b)
     return array.array
@@ -45,9 +51,11 @@ def random_array():
 
 def merge(arr, left, m, r):
     merged = []
+    count = 0
     i = left
     j = m + 1
     while i <= m and j <= r:
+        count += 1
         if arr[i] < arr[j]:
             merged.append(arr[i])
             i += 1
@@ -55,23 +63,28 @@ def merge(arr, left, m, r):
             merged.append(arr[j])
             j += 1
     while i <= m:
+        count += 1
         merged.append(arr[i])
         i += 1
     while j <= r:
+        count += 1
         merged.append(arr[j])
         j += 1
     for i in range(left, r + 1):
+        count += 1
         arr[i] = merged[i - left]
+    return count
 
 
 def merge_sort(arr, left, r):
+    count = 0
     if left >= r:
-        return
+        return count
     mid = (left + r) >> 1
-    merge_sort(arr, left, mid)
-    merge_sort(arr, mid + 1, r)
-    merge(arr, left, mid, r)
-
+    count += merge_sort(arr, left, mid)
+    count += merge_sort(arr, mid + 1, r)
+    count += merge(arr, left, mid, r)
+    return count
 
 def choose_next_move():
     try:
@@ -94,5 +107,5 @@ if __name__ == "__main__":
         try:
             new_array = choose_next_move()
             print(new_array)
-        except Exception as ex:
-            print(ex)
+        except Exception as exception:
+            print(exception)
