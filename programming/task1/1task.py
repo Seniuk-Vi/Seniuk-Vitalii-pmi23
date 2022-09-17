@@ -1,4 +1,5 @@
 import os
+import time
 
 # TASK:
 #   Задано масиви x, y, які складаються з N чисел.
@@ -10,100 +11,50 @@ import os
 LINE_SEP = os.linesep
 
 
-class Arrays:
+def sum_factors(n):
     """
-    Array class
+    :param n: number
+    :return: all the divisors of a number
     """
-
-    def __init__(self):
-        self.array_x = []
-        self.array_y = []
-        self.max = 0
-        self.min = 0
-        self.result_arr = []
-
-    def init(self):
-        array_x_size = input_array_size("Input first array size:")
-        self.array_x = create_array(array_x_size)
-        array_y_size = input_array_size("Input second array size:")
-        self.array_y = create_array(array_y_size)
-        return self
-
-    def product(self):
-        self.validate_arrays()
-        self.result_arr = []
-        for i in [x for x in self.array_x if x < 0]:
-            for j in [x for x in self.array_y if x > 0]:
-                self.result_arr.append(i * j)
-        for i in [x for x in self.array_x if x > 0]:
-            for j in [x for x in self.array_y if x < 0]:
-                self.result_arr.append(i * j)
-        self.max = max(self.result_arr)
-        self.min = min(self.result_arr)
-        return self
-
-    def replacing(self):
-        self.validate_arrays()
-        self.replace(self.array_x)
-        self.replace(self.array_y)
-        return self
-
-    def replace(self, array):
-        for i in range(len(array)):
-            print(array[i])
-            if array[i] == self.max:
-                array[i] = -array[i]
-            elif array[i] == self.min:
-                array[i] = 0
-
-    def validate_arrays(self):
-        if len(self.array_x) < 1 or len(self.array_y) < 1:
-            raise ValueError("Arrays are empty, init first!!!")
+    result = []
+    for i in range(1, int(n ** 0.5) + 1):
+        if n % i == 0:
+            result.extend([i, n // i])
+    return sum(set(result) - {n})
 
 
-def input_array_size(message):
+def amicable_pair(number):
+    """
+    :param number: number of amicable pairs to be counted
+    :return: list of tuples
+    """
+    result = []
+    x = 0
+    while True:
+        y = sum_factors(x)
+        if sum_factors(y) == x and x != y:
+            result.append(tuple(sorted((x, y))))
+        if len(result) == number:
+            break
+        x += 1
+    return set(result)
+
+
+def input_size():
     try:
-        array_size = int(input(message))
-        if 0 > array_size or array_size > 31:
+        size = int(input("Enter number of pairs [1-15]:"))
+        if 0 > size or size > 16:
             raise ValueError()
     except ValueError:
-        raise ValueError("Wrong array size[1-30]!!!")
-    return array_size
-
-
-def create_array(size):
-    try:
-        new_array = [int(input("number: ")) for i in range(size)]
-    except ValueError:
-        raise ValueError("Wrong array number input!!!")
-    return new_array
-
-
-def arrays_functions(arrays):
-    try:
-        choose = input(
-            f"Menu:"
-            f"{LINE_SEP} 1- create new arrays."
-            f"{LINE_SEP} 2- count the number of products (xi * yj) <0 and find the maximum and minimum of them."
-            f"{LINE_SEP} 3- Replace all numbers in arrays x, y that are equal to the maximum element with the opposite,"
-            f"{LINE_SEP}    and those numbers that are equal to the minimum, replace with zeros: "
-            f"{LINE_SEP} 4- exit:")
-        options = {"1": arrays.init, "2": arrays.product, "3": arrays.replacing, "4": exit}
-        return options[choose]()
-    except ValueError as ex:
-        raise ex
-    except KeyError:
-        raise ValueError("Please, enter the correct number!!!")
-
+        raise ValueError("Wrong number of pairs [2-15]!!!")
+    return size*2
 
 if __name__ == "__main__":
-    arrays = Arrays()
     while True:
         try:
-            arrays = arrays_functions(arrays)
-            print(f"first array: {arrays.array_x}")
-            print(f"second array: {arrays.array_y}")
-            print(f"result array: {arrays.result_arr}")
-            print(f"Number of elements in (x * y) < 0: {len(arrays.result_arr)}, min: {arrays.min}, max: {arrays.max}")
-        except Exception as exception:
-            print(exception)
+
+            start = time.time()
+            print(amicable_pair(input_size()))
+            print(time.time() - start)
+        except ValueError as ex:
+            print(ex)
