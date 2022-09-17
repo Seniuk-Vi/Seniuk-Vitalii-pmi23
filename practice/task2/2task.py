@@ -13,39 +13,57 @@ LINE_SEP = os.linesep
 
 
 class Array:
+    """
+    Array class
+    """
+
     def __init__(self, *data):
-        if len(data) == 1:
+        if len(data) == 1:  # 1
             try:
                 self.array = [int(input("number: ")) for i in range(data[0])]
             except ValueError:
-                raise ValueError("Wrong array number input")
-        elif len(data) == 2:
-            self.array = [random.randint(data[0], data[1] - 1) for i in range(data[0], data[1])]
+                raise ValueError("Wrong array number input!!!")
+        elif len(data) == 3:  # 2
+            if data[1] > data[2] - 1:
+                raise ValueError("Start must be less than end!!!")
+            self.array = [random.randint(data[1], data[2] - 1) for i in range(data[0])]
         else:
-            raise Exception("Wrong arguments in constructor")
+            raise Exception("Wrong arguments in constructor!!!")
         print(f"Total number of steps: {merge_sort(self.array, 0, len(self.array) - 1)}")
 
 
-def console_array():
+def input_array_size():
     try:
         array_size = int(input("Enter array size[2-30]:"))
-        if 1 > array_size > 31:
+        if 1 > array_size or array_size > 31:
             raise ValueError()
     except ValueError:
-        raise ValueError("Wrong array size[2-30]")
+        raise ValueError("Wrong array size[2-30]!!!")
+    return array_size
+
+
+def console_array():
+    """
+    Create array from console
+    :return: array
+    """
+    array_size = input_array_size()
     array = Array(array_size)
     return array.array
 
 
 def random_array():
+    """
+    Create random array with N length and with numbers in range[start-end]
+    :return:
+    """
     try:
-        a = int(input("Enter array start:"))
-        b = int(input("Enter array end:"))
-        if a > b - 1:
-            raise ValueError("Start must be less than end")
+        a = int(input("Enter start:"))
+        b = int(input("Enter end:"))
     except ValueError:
-        raise ValueError("Start must be less than end")
-    array = Array(a, b)
+        raise ValueError("Wrong integer input!!!")
+    array_size = input_array_size()
+    array = Array(array_size, a, b)
     return array.array
 
 
@@ -86,6 +104,7 @@ def merge_sort(arr, left, r):
     count += merge(arr, left, mid, r)
     return count
 
+
 def choose_next_move():
     try:
         choose = input(
@@ -98,7 +117,7 @@ def choose_next_move():
     except ValueError as ex:
         raise ex
     except KeyError:
-        raise ValueError("Please, enter the correct number")
+        raise ValueError("Please, enter the correct number!!!")
 
 
 if __name__ == "__main__":
