@@ -15,7 +15,7 @@ import time
 LINE_SEP = os.linesep
 
 
-def sum_factors(n):
+def div_sum(n):
     """
     :param n: number
     :return: all the divisors of a number
@@ -35,8 +35,8 @@ def amicable_pair(number):
     result = []
     x = 0
     while True:
-        y = sum_factors(x)
-        if sum_factors(y) == x and x != y:
+        y = div_sum(x)
+        if div_sum(y) == x and x != y:
             result.append(tuple(sorted((x, y))))
         if len(result) == number:
             break
