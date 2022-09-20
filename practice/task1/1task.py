@@ -1,6 +1,5 @@
 import doctest
 
-
 # TASK:
 #   Уявіть собі бджолині стільники - поле з шестикутних клітин зі стороною N. У верхній лівій клітці A
 #   знаходиться бджілка. За один хід вона може переповзти на клітку вниз, на клітину вниз-вправо або на клітку
@@ -12,6 +11,9 @@ import doctest
 
 #   Вихідні дані:
 #       Вивести на екран єдине ціле число - кількість способів.
+
+hexagon_min_size = 2
+hexagon_max_size = 12
 
 
 def appropriation(arr):
@@ -62,11 +64,11 @@ def int_input():
             n = int(input("Enter size of the hexagonal field(N), exit = 0: "))
             if n == 0:
                 break
-            if n < 2 or n > 12:
-                print("Input must be between 2 and 12")
+            if n < hexagon_min_size or n > hexagon_max_size:
+                print(f"Input must be between {hexagon_min_size} and {hexagon_max_size}")
                 continue
         except ValueError:
-            print("Please, enter the correct number [2,12]!")
+            print(f"Please, enter the correct number [{hexagon_min_size},{hexagon_max_size}]!")
             continue
         return n
 
