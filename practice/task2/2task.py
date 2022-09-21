@@ -35,7 +35,7 @@ class Array:
 def input_array_size():
     try:
         array_size = int(input("Enter array size[2-30]:"))
-        if 1 > array_size or array_size > 31:
+        if 2 > array_size or array_size > 30:
             raise ValueError()
     except ValueError:
         raise ValueError("Wrong array size[2-30]!!!")
