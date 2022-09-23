@@ -12,6 +12,8 @@ class Matrix:
     def create_array(self):
         """Create start array"""
         arr_size = number_input("Enter array size")
+        if arr_size < 0:
+            raise ValueError
         try:
             self.array = [int(input("number: ")) for i in range(arr_size)]
         except ValueError:
