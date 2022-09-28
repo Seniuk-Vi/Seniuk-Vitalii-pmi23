@@ -59,15 +59,34 @@ def input_size():
 
 
 if __name__ == "__main__":
+    am_list = None
     while True:
         try:
-            choose = int(input(f"1-create amicable pairs. {LINE_SEP}2-exit"))
+            choose = int(input(f"1-create amicable pairs. {LINE_SEP}2-Enter from keyboard."
+                               f"{LINE_SEP}3-Generate random from range[a,b]. {LINE_SEP}4-Add from pos. "
+                               f"{LINE_SEP}5-Delete from pos."
+                               f" {LINE_SEP}6-Print list. {LINE_SEP}7-exit"))
             if choose == 1:
                 start = time.time()
                 am_list = amicable_pair(input_size())
                 am_list.print()
                 print(time.time() - start)
             elif choose == 2:
+                number_of_elem = int(input("Enter number of elements"))
+                am_list.add_from_keyboard(number_of_elem)
+            elif choose == 3:
+                number_of_elem = int(input("Enter number of elements"))
+                am_list.add_random_from_range(number_of_elem)
+            elif choose == 4:
+                index_of_elem = int(input("Enter index to be added"))
+                data = int(input("Enter element to be added"))
+                am_list.add(index_of_elem, data)
+            elif choose == 5:
+                index_of_elem = int(input("Enter index to be deleted"))
+                am_list.delete(index_of_elem)
+            elif choose == 6:
+                am_list.print()
+            elif choose == 7:
                 exit()
         except ValueError as ex:
             print(ex)
