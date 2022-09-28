@@ -26,7 +26,7 @@ class LinkedList:
 
     def add(self, index, data):
         if index > self.length:
-            raise ValueError(f"Index({index}) less than list length({self.length})+1")
+            raise ValueError(f"Index({index}) must be less than list length({self.length})+1")
         current_node = self.head.next  # can optimize if try to check how it should go from tail or head
         for i in range(index):
             current_node = current_node.next
