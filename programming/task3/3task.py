@@ -7,24 +7,6 @@ from CreditCardRegex import *
 LINE_SEP = os.linesep
 
 
-def program(col, *functions):
-    """works only with class functions"""
-    try:
-        options = {}
-        i = 0
-        message = "Menu:"
-        for i in range(len(functions)):
-            options[i] = functions[i]
-            message += f"{LINE_SEP} {i}- {functions[i].__doc__}."
-        options[i + 1] = exit
-        choose = int(input(message))
-        return options[choose](col)
-    except ValueError:
-        raise ValueError("Please, enter the correct number!!!")
-    except KeyError:
-        raise ValueError("Please, enter the correct number!!!")
-
-
 def search(coll):
     """search in collection"""
     print(Collection.search(coll, input("Search: ")))
@@ -72,10 +54,27 @@ def exit_program(coll):
     exit(0)
 
 
+def program(col, *functions):
+    """works only with class functions"""
+    try:
+        options = {}
+        i = 0
+        message = "Menu:"
+        for i in range(len(functions)):
+            options[i] = functions[i]
+            message += f"{LINE_SEP} {i}- {functions[i].__doc__}."
+        options[i + 1] = exit
+        choose = int(input(message))
+        return options[choose](col)
+    except KeyError:
+        raise ValueError("Please, enter the correct number!!!")
+
+
 if __name__ == "__main__":
     collection = Collection()
     while True:
         try:
-            program(collection, add_to_coll, input_from_json,write_to_json, search, sort, print_col, edit_el, delete_el, exit_program)
+            program(collection, add_to_coll, input_from_json, write_to_json, search, sort, print_col, edit_el,
+                    delete_el, exit_program)
         except Exception as ex:
             print(ex)

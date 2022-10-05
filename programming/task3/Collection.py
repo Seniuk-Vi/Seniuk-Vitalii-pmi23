@@ -84,6 +84,6 @@ class Collection:
 
     def write_in_json_file(self, file_name):
         Validator.validateFileName(file_name, "json")
-        with open(file_name, mode='w', encoding='utf-8') as outfile:
+        with open(file_name, mode='w+', encoding='utf-8') as outfile:
             json.dump([ob.__dict__ for ob in self.mas], outfile, ensure_ascii=False)
         outfile.close()

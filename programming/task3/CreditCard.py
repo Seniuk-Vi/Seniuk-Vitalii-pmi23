@@ -42,7 +42,7 @@ class CreditCard:
     @id.setter
     def id(self, val):
         if not Validator.validate_with_regex(CreditCardRegex.id_regex, val):
-            raise AttributeError("ID isn't correct!!!")
+            raise ValueError("ID isn't correct!!!")
         self._id = val
 
     @property
@@ -52,7 +52,7 @@ class CreditCard:
     @bank.setter
     def bank(self, val):
         if not Validator.is_in_map([e.value for e in Banks], val):
-            raise AttributeError("Bank isn't correct!!!")
+            raise ValueError("Bank isn't correct!!!")
         self._bank = val
 
     @property
@@ -62,7 +62,7 @@ class CreditCard:
     @card_number.setter
     def card_number(self, val):
         if not Validator.validate_with_regex(CreditCardRegex.card_regex, val):
-            raise AttributeError("Card number isn't correct!!!")
+            raise ValueError("Card number isn't correct!!!")
         self._card_number = val
 
     @property
@@ -72,7 +72,7 @@ class CreditCard:
     @date_of_issue.setter
     def date_of_issue(self, val):
         if not Validator.validate_date_pass(val):
-            raise AttributeError("Date of issue isn't correct!!!")
+            raise ValueError("Date of issue isn't correct!!!")
         self._date_of_issue = val
 
     @property
@@ -82,7 +82,7 @@ class CreditCard:
     @date_of_expire.setter
     def date_of_expire(self, val):
         if not Validator.validate_date_future(val):
-            raise AttributeError("Date of expire isn't correct!!!")
+            raise ValueError("Date of expire isn't correct!!!")
         self._date_of_expire = val
 
     @property
@@ -92,7 +92,7 @@ class CreditCard:
     @cvc.setter
     def cvc(self, val):
         if not Validator.validate_with_regex(CreditCardRegex.cvc_regex, val):
-            raise AttributeError("CVC isn't correct!!!")
+            raise ValueError("CVC isn't correct!!!")
         self._cvc = val
 
     @property
@@ -102,7 +102,7 @@ class CreditCard:
     @owner_name.setter
     def owner_name(self, val):
         if not Validator.validate_with_regex(CreditCardRegex.owner_name_regex, val):
-            raise AttributeError("Owner name isn't correct!!!")
+            raise ValueError("Owner name isn't correct!!!")
         self._owner_name = val
 
     def input(self):
