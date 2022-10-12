@@ -1,0 +1,29 @@
+[
+  {
+    "id": "a",
+    "bank": "privatbanke",
+    "card_number": "12324 1234 1233 1234",
+    "date_of_issue": "05/09/2042",
+    "date_of_expire": "05/09/2023",
+    "cvc": "1234",
+    "owner_name": "Tom2 Bob"
+  },
+  {
+    "id": "2",
+    "bank": "monobank",
+    "card_number": "1111 1234 1233 2222",
+    "date_of_issue": "01/03/2012",
+    "date_of_expire": "05/09/2023",
+    "cvc": "153",
+    "owner_name": "Toma2s Kool"
+  },
+  {
+    "id": "3",
+    "bank": "oschadbank",
+    "card_number": "1234 1234 1233 1234",
+    "date_of_issue": "05/09/2022",
+    "date_of_expire": "05/09/2023",
+    "cvc": "123",
+    "owner_name": "Tom Bob"
+  }
+]
