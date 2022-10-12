@@ -116,7 +116,6 @@ class CreditCard:
             try:
                 setattr(self, key, res.get(key, value))
             except AttributeError:
-                print(f"Wrong param: {key} ==> {value}")
                 errors.append(f"Wrong param: {key} ==> {value}")
         if errors:
             raise AttributeError(errors)

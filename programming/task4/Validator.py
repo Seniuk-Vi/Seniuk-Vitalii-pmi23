@@ -3,6 +3,8 @@ from CreditCardRegex import *
 from Banks import *
 from datetime import datetime
 
+JSON = "json"
+
 
 class Validator:
 
@@ -85,11 +87,20 @@ class Validator:
         return validateFuture
 
     @staticmethod
+    def decoratorJsonFile(func):
+        def validateJsonFile(self, filename):
+            if not filename.endswith(JSON):
+                raise AttributeError("File should end with ." + JSON)
+            return func(self, filename)
+
+        return validateJsonFile
+
+    @staticmethod
     def is_in_map(map, value):
         return value in map
 
     @staticmethod
     def validateFileName(filename, end=".txt"):
         if not filename.endswith(end):
-            raise ValueError("File should end with ." + end)
+            raise AttributeError("File should end with ." + end)
         return filename

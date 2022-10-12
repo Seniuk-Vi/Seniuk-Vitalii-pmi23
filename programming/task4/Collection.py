@@ -83,8 +83,8 @@ class Collection:
             json.dump([ob.__dict__ for ob in self.mas], outfile, ensure_ascii=False)
         outfile.close()
 
+    @Validator.decoratorJsonFile
     def read_json_file(self, file_name):
-        Validator.validateFileName(file_name, "json")
         f = open(file_name)
         file = json.load(f)
         for i, card in enumerate(file):
@@ -94,8 +94,7 @@ class Collection:
                 print("Line" + str(i * (len(card) + 1) + 3) + ": " + str(ex))
         f.close()
         self.file_name = file_name
-
+    @Validator.decoratorJsonFile
     def write_in_json_file(self, file_name):
-        Validator.validateFileName(file_name, "json")
         self.file_name = file_name
         self.update_json()
