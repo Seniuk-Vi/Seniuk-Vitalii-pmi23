@@ -75,6 +75,8 @@ class Collection:
         element = CreditCard()
         element.input()
         self.mas.append(element)
+        self.update_json()
+
 
     def sort(self, field="id"):
         try:
