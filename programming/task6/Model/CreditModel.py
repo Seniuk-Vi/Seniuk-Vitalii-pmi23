@@ -20,7 +20,7 @@ class Card(CreditCard, db.Model):
     owner_name = db.Column(db.String(50), nullable=False)
 
     def __init__(self, bank, card_number, date_of_issue, date_of_expire, cvc, owner_name):
-        print("constrictor")
+
         # super().__init__(**{'bank': bank, 'card_number': card_number, 'date_of_issue': date_of_issue,
         #               'date_of_expire': date_of_expire, 'cvc': cvc, 'owner_name': owner_name})
         super(Card, self).__init__(**{'bank': bank, 'card_number': card_number, 'date_of_issue': date_of_issue,
@@ -53,15 +53,12 @@ class Card(CreditCard, db.Model):
     @validates('date_of_issue', 'date_of_expire')
     def validate_dates(self, key, field):
         date_format = "%Y-%m-%d"
-        print(field)
         try:
             start = deepcopy(field)
             date_format = "%Y-%m-%d"
             start = datetime.strptime(start, date_format)
         except Exception:
             raise AttributeError(f"Field must be formatted like {date_format}")
-        print(f"is: {self.date_of_issue}")
-        print(f"ex: {self.date_of_expire}")
         if key == 'date_of_expire' and self.date_of_issue is not None and start < self.date_of_issue or \
                 key == 'date_of_issue' and self.date_of_expire is not None and self.date_of_expire < start:
             raise AttributeError("The date_of_expire field must be " \
