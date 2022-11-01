@@ -1,5 +1,4 @@
 import os
-
 from ..Validator.Validator import Validator
 from ..Validator.CreditCardRegex import CreditCardRegex
 
@@ -11,9 +10,9 @@ class CreditCard:
         errors = []
         for (key, value) in array.items():
             try:
-                print(key, value)
                 setattr(self, key, array.get(key, value))
-            except AttributeError:
+            except Exception as ex :
+                print(ex)
                 errors.append(f"Wrong param: {key} ==> {value}")
         if errors:
             raise AttributeError(errors)
