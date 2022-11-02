@@ -1,0 +1,5 @@
+1  Add position ==> 0 -> ,	 Before:[ ],		 After: [  1 ] 
+2  Add position ==> (1, 5) -> ,	 Before:[  1 ],		 After: [  1  1  2  3  4  5 ] 
+3  Delete position ==> 0 -> ,	 Before:[  1  1  2  3  4  5 ],		 After: [  1  2  3  4  5 ] 
+4  Delete position ==> (1, 4) -> ,	 Before:[  1  2  3  4  5 ],		 After: [  1 ] 
+5  Delete position ==> 0 -> ,	 Before:[  1 ],		 After: [ ] 
