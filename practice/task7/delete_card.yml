@@ -1,0 +1,61 @@
+Endpoint that deletes card by card_id
+---
+parameters:
+  - name: card_id
+    in: path
+    type: string
+    required: true
+    description: Id of card to delete
+definitions:
+  Card:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: false
+        pattern: "\\d{1,15}"
+        definition: Card autoincrement id
+      bank:
+        type: enum
+        enum: [ privatbank, monobank ]
+        definition: Existing bank
+      card_number:
+        type: string
+        pattern: "(\\d{4}) (\\d{4}) (\\d{4}) (\\d{4})"
+        definition: card number with 16 symbols
+      date_of_issue:
+        type: string
+        definition: date of issue
+      date_of_expire:
+        type: string
+        definition: must be after date of issue
+      cvc:
+        type: integer
+        pattern: "\\d{3}"
+        definition: cvc with 3 digits
+      owner_name:
+        type: string
+        pattern: "^[a-zA-z ,.'-]+$"
+        definition: first and last name
+  Exceptions:
+    definition: own exception
+    type: object
+    properties:
+      exceptions:
+        type: array
+        items:
+          type: string
+        definition: exception trace
+responses:
+  200:
+    description: Card
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Card'
+  404:
+    description: Wrong delete card_id param
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'

@@ -1,0 +1,74 @@
+Endpoint that returns list of cards found by query params
+---
+parameters:
+  - name: sort_by
+    in: query
+    type: string
+    required: false
+    enum: [ "id", "bank", "card_number", "date_of_issue", "date_of_expire", "cvc", "owner_name" ]
+    description: filed to sort in Card
+  - name: sort_type
+    in: query
+    type: string
+    enum: [ asc,desc ]
+    required: false
+    default: asc
+    description: ascending or descending order
+  - name: offset
+    in: query
+    type: int
+    required: false
+    description: offset
+  - name: limit
+    in: query
+    type: int
+    required: false
+    description: limit
+definitions:
+  Card:
+    type: object
+    properties:
+      id:
+        type: integer
+        definition: Card autoincrement id
+      bank:
+        type: enum
+        enum: [ privatbank, monobank ]
+        definition: Existing bank
+      card_number:
+        type: string
+        definition: card number with 16 symbols
+      date_of_issue:
+        type: date
+        definition: date of issue
+      date_of_expire:
+        type: date
+        definition: must be after date of issue
+      cvc:
+        type: date
+        definition: cvc with 3 digits
+      owner_name:
+        type: date
+        definition: first and last name
+  Exceptions:
+    definition: own exception
+    type: object
+    properties:
+      exceptions:
+        type: array
+        items:
+          type: string
+        definition: exception trace
+responses:
+  200:
+    description: A list of cards and amount of cards in db
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Card'
+  404:
+    description: Not appropriate sort_by to sort
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
