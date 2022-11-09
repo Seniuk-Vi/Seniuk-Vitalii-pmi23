@@ -1,35 +1,24 @@
-Endpoint that returns list of cards found by query params
+Endpoint that deletes card by card_id
 ---
 parameters:
-  - name: sort_by
-    in: query
+  - name: x-access-tokens
+    in: header
     type: string
-    required: false
-    enum: [ "id", "bank", "card_number", "date_of_issue", "date_of_expire", "cvc", "owner_name" ]
-    description: filed to sort in Card
-  - name: sort_type
-    in: query
+    required: true
+    description: access token
+  - name: card_id
+    in: path
     type: string
-    enum: [ asc,desc ]
-    required: false
-    default: asc
-    description: ascending or descending order
-  - name: offset
-    in: query
-    type: int
-    required: false
-    description: offset
-  - name: limit
-    in: query
-    type: int
-    required: false
-    description: limit
+    required: true
+    description: Id of card to delete
 definitions:
   Card:
     type: object
     properties:
       id:
         type: integer
+        required: false
+        pattern: "\\d{1,15}"
         definition: Card autoincrement id
       bank:
         type: enum
@@ -37,18 +26,21 @@ definitions:
         definition: Existing bank
       card_number:
         type: string
+        pattern: "(\\d{4}) (\\d{4}) (\\d{4}) (\\d{4})"
         definition: card number with 16 symbols
       date_of_issue:
-        type: date
+        type: string
         definition: date of issue
       date_of_expire:
-        type: date
+        type: string
         definition: must be after date of issue
       cvc:
-        type: date
+        type: integer
+        pattern: "\\d{3}"
         definition: cvc with 3 digits
       owner_name:
-        type: date
+        type: string
+        pattern: "^[a-zA-z ,.'-]+$"
         definition: first and last name
   Exceptions:
     definition: own exception
@@ -61,13 +53,19 @@ definitions:
         definition: exception trace
 responses:
   200:
-    description: A list of cards and amount of cards in db
+    description: Card
     content:
       application/json:
         schema:
           $ref: '#/definitions/Card'
   404:
-    description: Not appropriate sort_by to sort
+    description: Wrong delete card_id param
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
     content:
       application/json:
         schema:

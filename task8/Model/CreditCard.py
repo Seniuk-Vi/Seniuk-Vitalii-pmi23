@@ -1,6 +1,6 @@
 import os
-from ..Validator.Validator import Validator
-from ..Validator.CreditCardRegex import CreditCardRegex
+from Seniuk.task8.Validator.Validator import Validator
+from Seniuk.task8.Validator.CreditCardRegex import CreditCardRegex
 
 LINE_SEP = os.linesep
 

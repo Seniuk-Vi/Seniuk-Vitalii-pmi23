@@ -1,0 +1,67 @@
+Endpoint that returns card found by card_id
+---
+parameters:
+  - name: card_id
+    in: path
+    type: string
+    required: true
+    description: Id of card to find
+  - name: x-access-tokens
+    in: header
+    type: string
+    required: true
+    description: access token
+definitions:
+  Card:
+    type: object
+    properties:
+      id:
+        type: integer
+        definition: Card autoincrement id
+      bank:
+        type: enum
+        enum: [ privatbank, monobank ]
+        definition: Existing bank
+      card_number:
+        type: string
+        definition: card number with 16 symbols
+      date_of_issue:
+        type: date
+        definition: date of issue
+      date_of_expire:
+        type: date
+        definition: must be after date of issue
+      cvc:
+        type: date
+        definition: cvc with 3 digits
+      owner_name:
+        type: date
+        definition: first and last name
+  Exceptions:
+    definition: own exception
+    type: object
+    properties:
+      exceptions:
+        type: array
+        items:
+          type: string
+        definition: exception trace
+responses:
+  200:
+    description: Card
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Card'
+  404:
+    description: No card found by card_id
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'

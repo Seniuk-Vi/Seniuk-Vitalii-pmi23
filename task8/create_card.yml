@@ -1,17 +1,17 @@
-Endpoint that update card by card_id and params in json body
+Endpoint that create card by card_id and params in json body
 ---
 parameters:
-  - name: card_id
-    in: path
-    type: string
-    required: true
-    description: Id of card to update
   - name: card
     in: body
-    description: "fields to update"
+    description: "card to create"
     required: false
     schema:
       $ref: '#/definitions/Card'
+  - name: x-access-tokens
+    in: header
+    type: string
+    required: true
+    description: access token
 definitions:
   Card:
     type: object
@@ -19,7 +19,6 @@ definitions:
       id:
         type: integer
         required: false
-        pattern: "\\d{1,15}"
         definition: Card autoincrement id
       bank:
         type: enum
@@ -53,14 +52,20 @@ definitions:
           type: string
         definition: exception trace
 responses:
-  200:
+  201:
     description: Card
     content:
       application/json:
         schema:
           $ref: '#/definitions/Card'
   400:
-    description: Wrong update request params
+    description: Wrong create request params
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
     content:
       application/json:
         schema:

@@ -1,0 +1,71 @@
+Endpoint that logins user
+---
+parameters:
+  - name: email
+    in: formData
+    type: string
+    description: email
+    required: true
+  - name: password
+    in: formData
+    type: string
+    description: password
+    required: true
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: false
+        definition: User autoincrement id
+      name:
+        type: string
+        required: false
+        definition: User name
+      surname:
+        type: string
+        required: false
+        definition: User surname
+      email:
+        type: string
+        required: false
+        definition: User email
+      password:
+        type: string
+        required: false
+        definition: User password (8 symbols, 1 Upper and 1 Lower)
+      admin:
+        type: boolean
+        default: false
+        required: false
+        definition: User role
+  Exceptions:
+    definition: own exception
+    type: object
+    properties:
+      exceptions:
+        type: array
+        items:
+          type: string
+        definition: exception trace
+responses:
+  200:
+    description: token
+    content:
+      application/json:
+        schema:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNjY4MDExMDU1fQ.QdX-z8X2dmwyU17UReXpcka_ZcAotb-_Ojdpc6GUR60
+  404:
+    description: Error with wrong login request parameters
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is invalid
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'

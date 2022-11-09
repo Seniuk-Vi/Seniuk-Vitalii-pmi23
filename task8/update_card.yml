@@ -1,12 +1,22 @@
-Endpoint that create card by card_id and params in json body
+Endpoint that update card by card_id and params in json body
 ---
 parameters:
+  - name: card_id
+    in: path
+    type: string
+    required: true
+    description: Id of card to update
   - name: card
     in: body
-    description: "card to create"
+    description: "fields to update"
     required: false
     schema:
       $ref: '#/definitions/Card'
+  - name: x-access-tokens
+    in: header
+    type: string
+    required: true
+    description: access token
 definitions:
   Card:
     type: object
@@ -48,14 +58,25 @@ definitions:
           type: string
         definition: exception trace
 responses:
-  201:
+  200:
     description: Card
     content:
       application/json:
         schema:
           $ref: '#/definitions/Card'
   400:
-    description: Wrong create request params
+    description: Wrong update request params
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  404:
+    description: Identity is already in use
+    content:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
     content:
       application/json:
         schema:

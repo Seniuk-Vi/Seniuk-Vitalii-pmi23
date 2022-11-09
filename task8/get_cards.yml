@@ -1,11 +1,39 @@
-Endpoint that returns card found by card_id
+Endpoint that returns list of cards found by query params
 ---
 parameters:
-  - name: card_id
-    in: path
+  - name: sort_by
+    in: query
+    type: string
+    required: false
+    enum: [ "id", "bank", "card_number", "date_of_issue", "date_of_expire", "cvc", "owner_name" ]
+    description: filed to sort in Card
+  - name: sort_type
+    in: query
+    type: string
+    enum: [ asc,desc ]
+    required: false
+    default: asc
+    description: ascending or descending order
+  - name: s
+    in: query
+    type: string
+    required: false
+    description: text to search
+  - name: offset
+    in: query
+    type: int
+    required: false
+    description: offset
+  - name: limit
+    in: query
+    type: int
+    required: false
+    description: limit
+  - name: x-access-tokens
+    in: header
     type: string
     required: true
-    description: Id of card to find
+    description: access token
 definitions:
   Card:
     type: object
@@ -43,13 +71,19 @@ definitions:
         definition: exception trace
 responses:
   200:
-    description: Card
+    description: A list of cards and amount of cards in db
     content:
       application/json:
         schema:
           $ref: '#/definitions/Card'
   404:
-    description: No card found by card_id
+    description: Not appropriate sort_by to sort
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
     content:
       application/json:
         schema:

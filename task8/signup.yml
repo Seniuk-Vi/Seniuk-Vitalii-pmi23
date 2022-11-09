@@ -1,0 +1,60 @@
+Endpoint that creates User
+---
+parameters:
+  - name: user
+    in: body
+    description: "user to create"
+    required: false
+    schema:
+      $ref: '#/definitions/User'
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: false
+        definition: User autoincrement id
+      name:
+        type: string
+        required: false
+        definition: User name
+      surname:
+        type: string
+        required: false
+        definition: User surname
+      email:
+        type: string
+        required: false
+        definition: User email
+      password:
+        type: string
+        required: false
+        definition: User password (8 symbols, 1 Upper and 1 Lower)
+      admin:
+        type: boolean
+        default: false
+        required: false
+        definition: User role
+  Exceptions:
+    definition: own exception
+    type: object
+    properties:
+      exceptions:
+        type: array
+        items:
+          type: string
+        definition: exception trace
+responses:
+  201:
+    description: User signed up
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/User'
+  404:
+    description: Wrong create request params
+    content:
+      application/json:
+        schema:
+          $ref: '#/definitions/Exceptions'
