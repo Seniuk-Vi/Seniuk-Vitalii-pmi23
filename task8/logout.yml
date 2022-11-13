@@ -55,7 +55,5 @@ responses:
           example: Successfully logout
   401:
     description: Token is invalid
-    content:
-      application/json:
-        schema:
+    schema:
           $ref: '#/definitions/Exceptions'

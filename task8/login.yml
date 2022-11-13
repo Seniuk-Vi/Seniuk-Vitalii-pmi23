@@ -59,13 +59,9 @@ responses:
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNjY4MDExMDU1fQ.QdX-z8X2dmwyU17UReXpcka_ZcAotb-_Ojdpc6GUR60
   404:
     description: Error with wrong login request parameters
-    content:
-      application/json:
-        schema:
+    schema:
           $ref: '#/definitions/Exceptions'
   401:
     description: Token is invalid
-    content:
-      application/json:
-        schema:
+    schema:
           $ref: '#/definitions/Exceptions'

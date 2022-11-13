@@ -54,7 +54,5 @@ responses:
           $ref: '#/definitions/User'
   404:
     description: Wrong create request params
-    content:
-      application/json:
-        schema:
+    schema:
           $ref: '#/definitions/Exceptions'

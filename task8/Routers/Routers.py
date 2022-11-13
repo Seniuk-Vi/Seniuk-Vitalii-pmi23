@@ -7,7 +7,7 @@ from Seniuk.task8.Model.CardException import *
 from Seniuk.task8.Model.UserException import *
 from Seniuk.task8.Model.UserModel import *
 from Seniuk.task8.Model.TokenBlackList import *
-from sqlalchemy import desc, cast
+from sqlalchemy import desc, cast, func
 from flasgger import swag_from
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
@@ -39,6 +39,24 @@ def token_required(f):
             exception.add_ex("Token is invalid")
             return jsonify(exception.to_json()), 401
 
+        return f(*args, **kwargs)
+
+    return decorator
+
+
+def admin_only(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        token = request.headers['x-access-tokens']
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            if 2 != data['id']:
+                exception = UserException("You don't have permission")
+                return jsonify(exception.to_json()), 403
+        except Exception as ex:
+            exception = UserException(str(ex))
+            exception.add_ex("Token is invalid")
+            return jsonify(exception.to_json()), 401
         return f(*args, **kwargs)
 
     return decorator
@@ -90,7 +108,7 @@ def login_user():
         return jsonify(exception.to_json()), 404
     if check_password_hash(user.password, auth.get('password')):
         token = jwt.encode(
-            {'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=45)},
+            {'id': user.id, 'admin': user.admin, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=45)},
             app.config['SECRET_KEY'], "HS256")
         if TokenBlackList.query.filter_by(token=token).first():  # check if token isn't in black list
             exception = UserException("Could not login")
@@ -160,12 +178,14 @@ def get_card(card_id):
 @swag_from('../get_users.yml')
 def get_users():
     users = UserModel.query
+   # return jsonify({"User":users.to_json()}), 200
     return jsonify({"Users": [user.to_json() for user in users]}), 200
 
 
 @app.post("/cards")
 @swag_from('../create_card.yml')
 @token_required
+@admin_only
 def create_card():
     if not request.json:
         abort(404)
@@ -176,15 +196,27 @@ def create_card():
         date_of_expire = request.json['date_of_expire']
         cvc = request.json['cvc']
         owner_name = request.json['owner_name']
-        card = Card(bank, card_number, date_of_issue, date_of_expire, cvc, owner_name)
+        user_id = request.json['user_id']
+        card = Card(bank, card_number, date_of_issue, date_of_expire, cvc, owner_name, user_id)
+        # check if user exists and have less than 5 cards
+        user = UserModel.query.filter_by(id=user_id).first()
+        if not user:
+            ex = CardException("User doesn't exists")
+            return jsonify(ex.to_json()), 404
+        if db.session.query(UserModel.id, func.count('*').label("count")).filter_by(id=user_id).join(Card).group_by(
+                UserModel).all().pop()[1] > 4:
+            ex = CardException("User already have 5 cards")
+            return jsonify(ex.to_json()), 404
+        # check if card is unique
         if Card.query.filter_by(card_number=card.card_number).first():
             ex = CardException("Credit card already in use")
             return jsonify(ex.to_json()), 404
         db.session.add(card)
         db.session.commit()
+
     except Exception as ex:
-        exception = CardException(str(ex))
-        exception.add_ex("Wrong request params")
+        exception = CardException("Wrong request params")
+        exception.add_ex(str(ex))
         db.session.rollback()
         return jsonify(exception.to_json()), 400
     return jsonify(card.to_json()), 201
@@ -193,6 +225,7 @@ def create_card():
 @app.put('/cards/<int:card_id>')
 @swag_from('../update_card.yml')
 @token_required
+@admin_only
 def update_card(card_id):
     if not request.json:
         abort(400)
@@ -220,6 +253,7 @@ def update_card(card_id):
 @app.delete("/cards/<int:card_id>")
 @swag_from('../delete_card.yml')
 @token_required
+@admin_only
 def delete_card(card_id):
     card = Card.query.get(card_id)
     if card is None:

@@ -10,14 +10,17 @@ import jwt
 
 
 class UserModel(db.Model):
-    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     surname = db.Column(db.String(50))
     email = db.Column(db.String(70), unique=True)
     password = db.Column(db.String(256))
     admin = db.Column(db.Boolean)
+    cards = db.relationship('Card', backref="usermodel")
+
     # npassword = None
+    def __repr__(self):
+        return f'<User "{self.name}">'
 
     @validates('name')
     def validate_name(self, key, name):
@@ -33,7 +36,6 @@ class UserModel(db.Model):
 
     @validates('email')
     def validate_email(self, key, email):
-        print(email)
         if not Validator.validate_with_regex(CreditCardRegex.email_regex, email):
             raise AttributeError("Email isn't correct!!!")
         return email
@@ -47,9 +49,13 @@ class UserModel(db.Model):
     #     return npassword
 
     def to_json(self):
+        c = []
+        for i in self.cards:
+            c.append(i.to_json())
         return {
             'id': self.id,
             'name': self.name,
             'surname': self.surname,
-            'email': self.email
+            'email': self.email,
+            'user cards': c
         }

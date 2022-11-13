@@ -42,6 +42,9 @@ definitions:
         type: string
         pattern: "^[a-zA-z ,.'-]+$"
         definition: first and last name
+      user_id:
+        type: integer
+        definition: user id which own card
   Exceptions:
     definition: own exception
     type: object
@@ -54,19 +57,13 @@ definitions:
 responses:
   201:
     description: Card
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Card'
+    schema:
+      $ref: '#/definitions/Card'
   400:
     description: Wrong create request params
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Exceptions'
+    schema:
+      $ref: '#/definitions/Exceptions'
   401:
     description: Token is not valid
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Exceptions'
+    schema:
+      $ref: '#/definitions/Exceptions'
