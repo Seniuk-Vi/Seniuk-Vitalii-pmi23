@@ -1,15 +1,14 @@
-from Seniuk.practice.task7.Model.CreditCard import CreditCard
-from Seniuk.practice.task7.app import db
-from Seniuk.practice.task7.Validator.Validator import Validator
-from Seniuk.practice.task7.Enums.Banks import *
-from Seniuk.practice.task7.Validator.CreditCardRegex import *
+from Seniuk.task8.Model.CreditCard import CreditCard
+from Seniuk.task8.app import db
+from Seniuk.task8.Validator.Validator import Validator
+from Seniuk.task8.Enums.Banks import *
+from Seniuk.task8.Validator.CreditCardRegex import *
 from sqlalchemy.orm import validates
 from datetime import datetime
 from copy import deepcopy
 
 
 class Card(CreditCard, db.Model):
-    __tablename__ = 'creditcards'
 
     id = db.Column(db.Integer, primary_key=True)
     bank = db.Column(db.String(255), nullable=False)
@@ -18,14 +17,17 @@ class Card(CreditCard, db.Model):
     date_of_expire = db.Column(db.DateTime(), nullable=False)
     cvc = db.Column(db.Integer(), nullable=False)
     owner_name = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_model.id'))
 
-    def __init__(self, bank, card_number, date_of_issue, date_of_expire, cvc, owner_name):
-
+    def __init__(self, bank, card_number, date_of_issue, date_of_expire, cvc, owner_name, user_id):
+        self.user_id = user_id
         # super().__init__(**{'bank': bank, 'card_number': card_number, 'date_of_issue': date_of_issue,
         #               'date_of_expire': date_of_expire, 'cvc': cvc, 'owner_name': owner_name})
         super(Card, self).__init__(**{'bank': bank, 'card_number': card_number, 'date_of_issue': date_of_issue,
                                       'date_of_expire': date_of_expire, 'cvc': cvc, 'owner_name': owner_name})
 
+    def __repr__(self):
+        return f'<Comment "{self.card_number}...">'
     @validates('bank')
     def validate_bank(self, key, bank):
         if not Validator.is_in_map([e.value for e in Banks], bank):

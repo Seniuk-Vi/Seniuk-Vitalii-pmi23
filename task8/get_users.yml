@@ -1,11 +1,11 @@
-Endpoint that returns card found by card_id
+Endpoint that returns list of users
 ---
 parameters:
-  - name: card_id
-    in: path
+  - name: x-access-tokens
+    in: header
     type: string
     required: true
-    description: Id of card to find
+    description: access token
 definitions:
   Card:
     type: object
@@ -32,6 +32,29 @@ definitions:
       owner_name:
         type: date
         definition: first and last name
+
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        definition: User autoincrement id
+      email:
+        type: string
+        definition: valid user email
+      name:
+        type: string
+        definition: name of user
+      surname:
+        type: string
+        definition: surname of user
+      user cards:
+        type: array
+        definition: user cards
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Card'
   Exceptions:
     definition: own exception
     type: object
@@ -43,14 +66,10 @@ definitions:
         definition: exception trace
 responses:
   200:
-    description: Card
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Card'
-  404:
-    description: No card found by card_id
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Exceptions'
+    description: A list of users in db
+    schema:
+      $ref: '#/definitions/User'
+  401:
+    description: Token is not valid
+    schema:
+       $ref: '#/definitions/Exceptions'

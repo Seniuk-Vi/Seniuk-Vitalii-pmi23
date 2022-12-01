@@ -1,11 +1,17 @@
-Endpoint that deletes card by card_id
+Endpoint that create card by card_id and params in json body
 ---
 parameters:
-  - name: card_id
-    in: path
+  - name: card
+    in: body
+    description: "card to create"
+    required: false
+    schema:
+      $ref: '#/definitions/Card'
+  - name: x-access-tokens
+    in: header
     type: string
     required: true
-    description: Id of card to delete
+    description: access token
 definitions:
   Card:
     type: object
@@ -13,7 +19,6 @@ definitions:
       id:
         type: integer
         required: false
-        pattern: "\\d{1,15}"
         definition: Card autoincrement id
       bank:
         type: enum
@@ -37,6 +42,9 @@ definitions:
         type: string
         pattern: "^[a-zA-z ,.'-]+$"
         definition: first and last name
+      user_id:
+        type: integer
+        definition: user id which own card
   Exceptions:
     definition: own exception
     type: object
@@ -47,15 +55,15 @@ definitions:
           type: string
         definition: exception trace
 responses:
-  200:
+  201:
     description: Card
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Card'
-  404:
-    description: Wrong delete card_id param
-    content:
-      application/json:
-        schema:
-          $ref: '#/definitions/Exceptions'
+    schema:
+      $ref: '#/definitions/Card'
+  400:
+    description: Wrong create request params
+    schema:
+      $ref: '#/definitions/Exceptions'
+  401:
+    description: Token is not valid
+    schema:
+      $ref: '#/definitions/Exceptions'
